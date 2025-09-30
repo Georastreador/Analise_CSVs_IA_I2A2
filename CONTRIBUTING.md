@@ -240,7 +240,7 @@ Seguimos [Semantic Versioning](https://semver.org/):
 ## 📞 Suporte
 
 ### Canais de Comunicação
-- 📧 **Email**: contato@csvanalysisai.com
+- 📧 **Email**: ursodecasaco@gmail.com
 - 💬 **Discord**: [Link do servidor]
 - 🐛 **Issues**: GitHub Issues
 - 📖 **Wiki**: Documentação do projeto
