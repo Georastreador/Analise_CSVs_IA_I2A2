@@ -199,9 +199,9 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 - **Memória**: Monitore uso de RAM com datasets grandes
 
 ### Obter Ajuda
-- 📧 **Email**: suporte@csvanalysisai.com
-- 🐛 **Issues**: [GitHub Issues](https://github.com/seu-usuario/csv-analysis-ai/issues)
-- 📖 **Documentação**: [Wiki do Projeto](https://github.com/seu-usuario/csv-analysis-ai/wiki)
+- 📧 **Email**: ursodecasaco@gmail.com
+- 🐛 **Issues**: [GitHub Issues](https://github.com/georastreeador/csv-analysis-ai/issues)
+- 📖 **Documentação**: [Wiki do Projeto](https://github.com/georastreador/csv-analysis-ai/wiki)
 
 ## 🎯 Roadmap
 
