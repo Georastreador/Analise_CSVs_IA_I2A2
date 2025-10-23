@@ -18,6 +18,13 @@
 - Deployment configured for autoscale
 
 ## Recent Changes
+**Date: 2025-10-23**
+- 🐛 **Bug Fix**: Corrigido problema crítico onde agentes CrewAI analisavam dados de arquivos antigos
+  - Removida verificação de cache que retornava análises antigas
+  - Adicionada recriação de tarefas para garantir análise do arquivo atual
+  - Melhoradas mensagens para mostrar claramente qual arquivo está sendo analisado
+  - Agora cada análise é executada no arquivo CSV que está carregado no momento
+
 **Date: 2025-09-30**
 - ✅ Installed Python 3.11 and all dependencies
 - ✅ Created Streamlit configuration (.streamlit/config.toml) for Replit

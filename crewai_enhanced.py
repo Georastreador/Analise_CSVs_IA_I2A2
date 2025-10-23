@@ -339,16 +339,19 @@ class CrewAIEnhanced:
                 st.error("❌ Nenhum dado carregado!")
                 return {}
             
-            # Verificar se já existe análise em cache
-            search_results = analysis_memory.search_analyses(analysis_name)
-            if search_results:
-                analysis_id = search_results[0]['analysis_id']
-                cached_analysis = analysis_memory.get_analysis_results(analysis_id)
-                if cached_analysis:
-                    st.info("📋 Usando análise em cache...")
-                    return cached_analysis
+            # Obter nome do arquivo atual
+            filename = data_manager.get_current_filename() or "arquivo atual"
             
-            st.info("🚀 Iniciando análise CrewAI...")
+            # CORREÇÃO: Não usar cache - sempre analisar o arquivo atual
+            # Isso garante que cada arquivo carregado seja analisado corretamente
+            # em vez de retornar análises antigas de arquivos diferentes
+            
+            st.info(f"🚀 Iniciando análise CrewAI do arquivo: **{filename}**")
+            st.info(f"📊 Dataset: {len(df)} registros × {len(df.columns)} colunas")
+            
+            # CORREÇÃO: Recriar tarefas com os dados atuais
+            # Isso garante que as tarefas sempre usem o arquivo CSV que está carregado agora
+            self._create_tasks()
             
             # Debug: verificar agentes antes de criar crew
             st.write(f"🔍 Debug: Criando crew com {len(self.agents)} agentes")
