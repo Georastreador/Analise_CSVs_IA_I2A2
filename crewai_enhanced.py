@@ -59,13 +59,15 @@ class CrewAIEnhanced:
                 
                 return True
             elif api_provider == "GROQ" and ChatGroq and api_key:
+                # CORREÇÃO: llama3-8b-8192 foi descontinuado
+                # Usando llama-3.1-8b-instant que é mais rápido e atual
                 self.llm = ChatGroq(
                     api_key=api_key,
-                    model="groq/llama3-8b-8192",
+                    model="groq/llama-3.1-8b-instant",
                     temperature=0.1,
                     timeout=30
                 )
-                st.info("🤖 Usando GROQ Llama3-8b")
+                st.info("🤖 Usando GROQ Llama 3.1 8B Instant")
                 
                 # Configurar variável de ambiente para o CrewAI
                 os.environ["GROQ_API_KEY"] = api_key

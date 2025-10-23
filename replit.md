@@ -18,6 +18,12 @@
 - Deployment configured for autoscale
 
 ## Recent Changes
+**Date: 2025-10-23 (Atualização 3)**
+- 🔧 **GROQ Modelo Atualizado**: 
+  - Modelo `llama3-8b-8192` foi descontinuado pela Groq
+  - Atualizado para `llama-3.1-8b-instant` (mais rápido e atual)
+  - Resolve erro "model_decommissioned" ao usar GROQ
+
 **Date: 2025-10-23 (Atualização 2)**
 - 🐛 **Bug Fix Crítico**: Interface de Conclusões corrigida
   - Agora mostra automaticamente a análise ATUAL/mais recente por padrão
@@ -74,11 +80,11 @@ csv_analysis_app_v2.py     # Main Streamlit application
 6. **Strategic Synthesizer** - Strategic synthesis and recommendations
 
 ### Supported AI Providers
-- OpenAI (GPT models)
-- Groq (fast inference)
-- Google Gemini
-- Anthropic Claude
-- Perplexity
+- **OpenAI**: GPT-4o-mini
+- **Groq**: Llama 3.1 8B Instant (modelo rápido e eficiente)
+- **Google Gemini**: Gemini 1.5 Flash
+- **Anthropic Claude**: Claude 3 Haiku
+- **Perplexity**: Suporte via requests
 
 ## Technical Configuration
 
