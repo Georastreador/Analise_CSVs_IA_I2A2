@@ -61,20 +61,30 @@ class CrewAIEnhanced:
             elif api_provider == "GROQ" and ChatGroq and api_key:
                 self.llm = ChatGroq(
                     api_key=api_key,
-                    model="llama3-8b-8192",
+                    model="groq/llama3-8b-8192",
                     temperature=0.1,
                     timeout=30
                 )
                 st.info("🤖 Usando GROQ Llama3-8b")
+                
+                # Configurar variável de ambiente para o CrewAI
+                os.environ["GROQ_API_KEY"] = api_key
+                st.write(f"🔍 Debug: Variável de ambiente GROQ_API_KEY configurada")
+                
                 return True
             elif api_provider == "Gemini" and ChatGoogleGenerativeAI and api_key:
                 self.llm = ChatGoogleGenerativeAI(
                     api_key=api_key,
-                    model="gemini-pro",
+                    model="gemini-1.5-flash",
                     temperature=0.1,
                     timeout=30
                 )
-                st.info("🤖 Usando Google Gemini Pro")
+                st.info("🤖 Usando Google Gemini 1.5 Flash")
+                
+                # Configurar variável de ambiente para o CrewAI
+                os.environ["GOOGLE_API_KEY"] = api_key
+                st.write(f"🔍 Debug: Variável de ambiente GOOGLE_API_KEY configurada")
+                
                 return True
             elif api_provider == "Claude" and ChatAnthropic and api_key:
                 self.llm = ChatAnthropic(
@@ -84,6 +94,11 @@ class CrewAIEnhanced:
                     timeout=30
                 )
                 st.info("🤖 Usando Anthropic Claude Haiku")
+                
+                # Configurar variável de ambiente para o CrewAI
+                os.environ["ANTHROPIC_API_KEY"] = api_key
+                st.write(f"🔍 Debug: Variável de ambiente ANTHROPIC_API_KEY configurada")
+                
                 return True
             else:
                 st.error("❌ Provedor de API não suportado ou chave inválida!")
