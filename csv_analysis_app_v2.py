@@ -412,70 +412,140 @@ def show_conclusions_interface():
     """Interface para mostrar conclusões dos agentes CrewAI"""
     from analysis_memory import analysis_memory
     
-    # Verificar se há análises disponíveis
-    analysis_history = analysis_memory.get_analysis_history()
+    # Botão para limpar análises antigas
+    col1, col2 = st.columns([3, 1])
+    with col2:
+        if st.button("🗑️ Limpar Histórico"):
+            analysis_memory.clear_analysis_memory()
+            st.success("✅ Histórico de análises limpo!")
+            st.rerun()
     
-    if not analysis_history:
+    # CORREÇÃO: Mostrar automaticamente a análise ATUAL (mais recente)
+    # em vez de forçar o usuário a selecionar de uma lista de análises antigas
+    current_analysis_id = analysis_memory.current_analysis
+    
+    if not current_analysis_id:
         st.info("📋 Nenhuma análise CrewAI disponível. Execute uma análise primeiro.")
         return
     
-    # Converter dicionário para lista de análises
-    analyses_list = []
-    for analysis_id, analysis_data in analysis_history.items():
-        analyses_list.append({
-            'id': analysis_id,
-            'name': analysis_data.get('analysis_name', f'Análise {analysis_id[:8]}'),
-            'date': analysis_data.get('timestamp', 'Data não disponível'),
-            'status': analysis_data.get('status', 'unknown')
-        })
+    # Obter resultados da análise atual
+    results = analysis_memory.get_analysis_results(current_analysis_id)
     
-    # Selecionar análise
-    analysis_names = [analysis['name'] for analysis in analyses_list]
-    selected_analysis_name = st.selectbox("Selecione uma análise:", analysis_names)
-    
-    if selected_analysis_name:
-        # Encontrar a análise selecionada
-        selected_analysis = None
-        for analysis in analyses_list:
-            if analysis['name'] == selected_analysis_name:
-                selected_analysis = analysis
-                break
+    if results:
+        # Mostrar informações da análise atual
+        data_summary = results.get('data_summary', {})
+        st.markdown(f"### 📊 Análise Atual: {results.get('analysis_name', 'Análise CrewAI')}")
+        st.markdown(f"**Data:** {results.get('timestamp', 'N/A')}")
+        st.markdown(f"**Dataset analisado:** {data_summary.get('rows', 0)} registros × {data_summary.get('columns', 0)} colunas")
         
-        if selected_analysis:
-            analysis_id = selected_analysis['id']
-            results = analysis_memory.get_analysis_results(analysis_id)
+        # Mostrar colunas analisadas
+        if data_summary.get('column_names'):
+            with st.expander("📋 Colunas Analisadas", expanded=False):
+                st.write(", ".join(data_summary.get('column_names', [])))
+        
+        st.markdown("---")
+        
+        # Obter resultados dos agentes
+        crew_results = results.get('crew_results', {})
+        
+        if crew_results:
+            # Verificar se há agentes nos resultados
+            agents = crew_results.get('agents', {})
             
-            if results and 'crew_results' in results:
-                st.markdown(f"### 📊 Resultados da Análise: {selected_analysis_name}")
-                st.markdown(f"**Data:** {selected_analysis['date']}")
+            if agents:
+                st.markdown("### 🤖 Conclusões dos Agentes")
                 
-                # Mostrar resultados dos agentes
-                crew_results = results['crew_results']
-                
-                for agent_key, agent_result in crew_results.items():
+                for agent_key, agent_result in agents.items():
                     # Mapear chaves dos agentes para nomes amigáveis
                     agent_names = {
-                        'data_validator': 'Data Validator',
-                        'data_profiler': 'Data Profiler', 
-                        'pattern_detective': 'Pattern Detective',
-                        'anomaly_hunter': 'Anomaly Hunter',
-                        'relationship_analyst': 'Relationship Analyst',
-                        'strategic_synthesizer': 'Strategic Synthesizer'
+                        'data_validator': '🔍 Data Validator',
+                        'data_profiler': '📊 Data Profiler', 
+                        'pattern_detective': '🎯 Pattern Detective',
+                        'anomaly_hunter': '⚠️ Anomaly Hunter',
+                        'relationship_analyst': '🔗 Relationship Analyst',
+                        'strategic_synthesizer': '💡 Strategic Synthesizer',
+                        'synthesis': '💡 Strategic Synthesizer',
+                        'complete_analysis': '📋 Complete Analysis'
                     }
                     
                     agent_name = agent_names.get(agent_key, agent_key.replace('_', ' ').title())
                     
-                    with st.expander(f"🤖 {agent_name}", expanded=True):
-                        if isinstance(agent_result, dict) and 'output' in agent_result:
-                            st.markdown("**Resultado Completo:**")
-                            st.write(agent_result['output'])
+                    with st.expander(f"{agent_name}", expanded=True):
+                        if isinstance(agent_result, dict):
+                            result_text = agent_result.get('result', agent_result.get('output', 'Nenhum resultado disponível'))
+                            st.markdown(result_text)
                         else:
-                            st.markdown("**Resultado:**")
-                            st.write(agent_result)
+                            st.markdown(str(agent_result))
             else:
-                st.warning("⚠️ Nenhum resultado encontrado para esta análise.")
+                # Resultados antigos sem estrutura de agentes
+                st.warning("⚠️ Formato de resultados desatualizado. Execute uma nova análise.")
         else:
-            st.warning("⚠️ Análise selecionada não encontrada.")
+            st.warning("⚠️ Nenhum resultado encontrado nesta análise.")
+    else:
+        st.warning("⚠️ Não foi possível carregar os resultados da análise atual.")
+    
+    # Seção opcional para ver análises antigas (colapsada por padrão)
+    with st.expander("📚 Ver Análises Anteriores", expanded=False):
+        analysis_history = analysis_memory.get_analysis_history()
+        
+        if not analysis_history:
+            st.info("Nenhuma análise anterior disponível.")
+        else:
+            # Converter dicionário para lista de análises
+            analyses_list = []
+            for analysis_id, analysis_data in analysis_history.items():
+                if analysis_id != current_analysis_id:  # Não mostrar a atual
+                    analyses_list.append({
+                        'id': analysis_id,
+                        'name': analysis_data.get('analysis_name', f'Análise {analysis_id[:8]}'),
+                        'date': analysis_data.get('timestamp', 'Data não disponível'),
+                        'status': analysis_data.get('status', 'unknown')
+                    })
+            
+            if analyses_list:
+                # Selecionar análise anterior
+                analysis_names = [f"{a['name']} ({a['date']})" for a in analyses_list]
+                selected_idx = st.selectbox("Selecione uma análise anterior:", range(len(analysis_names)), format_func=lambda i: analysis_names[i])
+                
+                if selected_idx is not None:
+                    selected_analysis = analyses_list[selected_idx]
+                    old_analysis_id = selected_analysis['id']
+                    old_results = analysis_memory.get_analysis_results(old_analysis_id)
+                    
+                    if old_results and 'crew_results' in old_results:
+                        st.markdown(f"### 📊 {selected_analysis['name']}")
+                        st.markdown(f"**Data:** {selected_analysis['date']}")
+                        
+                        # Mostrar resultados dos agentes antigos
+                        old_crew_results = old_results['crew_results']
+                        
+                        # Verificar se tem estrutura nova ou antiga
+                        if 'agents' in old_crew_results:
+                            agents = old_crew_results['agents']
+                            for agent_key, agent_result in agents.items():
+                                agent_names = {
+                                    'data_validator': '🔍 Data Validator',
+                                    'data_profiler': '📊 Data Profiler', 
+                                    'pattern_detective': '🎯 Pattern Detective',
+                                    'anomaly_hunter': '⚠️ Anomaly Hunter',
+                                    'relationship_analyst': '🔗 Relationship Analyst',
+                                    'strategic_synthesizer': '💡 Strategic Synthesizer'
+                                }
+                                agent_name = agent_names.get(agent_key, agent_key.replace('_', ' ').title())
+                                with st.expander(f"{agent_name}", expanded=False):
+                                    if isinstance(agent_result, dict):
+                                        st.markdown(agent_result.get('result', 'Nenhum resultado disponível'))
+                                    else:
+                                        st.markdown(str(agent_result))
+                        else:
+                            # Formato antigo
+                            for agent_key, agent_result in old_crew_results.items():
+                                with st.expander(f"🤖 {agent_key}", expanded=False):
+                                    st.write(agent_result)
+                    else:
+                        st.warning("⚠️ Nenhum resultado encontrado para esta análise.")
+            else:
+                st.info("Nenhuma análise anterior disponível (somente a análise atual existe).")
 
 def show_minimal_overview(df):
     """Overview minimalista dos dados"""

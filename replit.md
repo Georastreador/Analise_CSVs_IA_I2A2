@@ -18,7 +18,21 @@
 - Deployment configured for autoscale
 
 ## Recent Changes
-**Date: 2025-10-23**
+**Date: 2025-10-23 (Atualização 2)**
+- 🐛 **Bug Fix Crítico**: Interface de Conclusões corrigida
+  - Agora mostra automaticamente a análise ATUAL/mais recente por padrão
+  - Adicionado botão "🗑️ Limpar Histórico" para limpar análises antigas
+  - Análises anteriores movidas para expander colapsado opcional
+  - Resolve problema onde usuário via conclusões de arquivos antigos
+
+- 🔧 **Correção GROQ e outros providers**:
+  - **GROQ**: Corrigido modelo para incluir prefixo "groq/" necessário para LiteLLM
+  - **GROQ**: Adicionada variável de ambiente GROQ_API_KEY
+  - **Gemini**: Atualizado para "gemini-1.5-flash" + variável GOOGLE_API_KEY
+  - **Claude**: Adicionada variável ANTHROPIC_API_KEY
+  - Resolve erro "LLM Provider NOT provided" ao usar GROQ
+
+**Date: 2025-10-23 (Atualização 1)**
 - 🐛 **Bug Fix**: Corrigido problema crítico onde agentes CrewAI analisavam dados de arquivos antigos
   - Removida verificação de cache que retornava análises antigas
   - Adicionada recriação de tarefas para garantir análise do arquivo atual

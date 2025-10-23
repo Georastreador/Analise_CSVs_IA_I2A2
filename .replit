@@ -33,10 +33,6 @@ outputType = "webview"
 localPort = 5000
 externalPort = 80
 
-[[ports]]
-localPort = 36019
-externalPort = 3000
-
 [deployment]
 deploymentTarget = "autoscale"
 run = ["streamlit", "run", "csv_analysis_app_v2.py", "--server.port=5000", "--server.address=0.0.0.0", "--server.headless=true"]
