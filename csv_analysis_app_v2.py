@@ -80,23 +80,9 @@ st.set_page_config(
 # CSS personalizado estilo Apple
 st.markdown("""
 <style>
-    /* Forçar sidebar sempre visível */
-    [data-testid="stSidebar"] {
-        display: block !important;
-        visibility: visible !important;
-        min-width: 250px !important;
-    }
-    
-    [data-testid="stSidebar"][aria-expanded="false"] {
-        margin-left: 0 !important;
-    }
-    
-    [data-testid="stSidebar"][aria-expanded="true"] {
-        margin-left: 0 !important;
-    }
-    
+    /* Estilo da sidebar */
     section[data-testid="stSidebar"] > div {
-        background-color: #f5f5f7 !important;
+        background-color: #f5f5f7;
     }
     
     /* Reset e base */
