@@ -99,11 +99,6 @@ st.markdown("""
         background-color: #f5f5f7 !important;
     }
     
-    /* Botão de toggle da sidebar */
-    button[kind="header"] {
-        display: none !important;
-    }
-    
     /* Reset e base */
     .main .block-container {
         padding-top: 2rem;
