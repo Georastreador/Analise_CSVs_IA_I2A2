@@ -349,6 +349,10 @@ def show_simple_chat_interface(df):
         chat_ai = EnhancedChatAI(api_provider, api_key)
         response = chat_ai.generate_enhanced_response(user_message, df)
         
+        # Inicializar variáveis
+        response_text = None
+        chart = None
+        
         # Mostrar resposta (response é uma tupla: (texto, gráfico))
         st.markdown("#### 🤖 Resposta:")
         if isinstance(response, tuple):
@@ -359,14 +363,15 @@ def show_simple_chat_interface(df):
             if chart:
                 st.plotly_chart(chart, use_container_width=True)
         else:
+            response_text = response
             st.write(response)
         
         # Salvar na conversação
         st.session_state.conversation.append({
             "timestamp": datetime.now().isoformat(),
             "user_message": user_message,
-            "ai_response": response_text if isinstance(response, tuple) else response,
-            "has_chart": chart is not None if isinstance(response, tuple) else False
+            "ai_response": response_text,
+            "has_chart": chart is not None
         })
     
     # Botão para download da conversação em JSON
