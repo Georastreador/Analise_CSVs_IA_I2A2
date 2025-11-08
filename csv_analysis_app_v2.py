@@ -80,6 +80,30 @@ st.set_page_config(
 # CSS personalizado estilo Apple
 st.markdown("""
 <style>
+    /* Forçar sidebar sempre visível */
+    [data-testid="stSidebar"] {
+        display: block !important;
+        visibility: visible !important;
+        min-width: 250px !important;
+    }
+    
+    [data-testid="stSidebar"][aria-expanded="false"] {
+        margin-left: 0 !important;
+    }
+    
+    [data-testid="stSidebar"][aria-expanded="true"] {
+        margin-left: 0 !important;
+    }
+    
+    section[data-testid="stSidebar"] > div {
+        background-color: #f5f5f7 !important;
+    }
+    
+    /* Botão de toggle da sidebar */
+    button[kind="header"] {
+        display: none !important;
+    }
+    
     /* Reset e base */
     .main .block-container {
         padding-top: 2rem;
@@ -999,7 +1023,18 @@ def main():
                 
     
     else:
-        # Tela inicial
+        # Tela inicial com destaque para sidebar
+        st.markdown("""
+        <div style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); 
+                    border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; 
+                    border: 2px solid #ff6b6b; box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);">
+            <h3 style="color: white; margin: 0;">👈 ATENÇÃO: Use a barra lateral (sidebar) à esquerda!</h3>
+            <p style="color: white; margin-top: 0.5rem; font-size: 1.1rem;">
+                Se você não vê a barra lateral, clique no ícone <strong>&gt;</strong> no canto superior esquerdo para abri-la.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
         st.markdown("""
         <div class="info-card">
             <h3>🎯 Bem-vindo ao ROC CSV Analysis AI</h3>
