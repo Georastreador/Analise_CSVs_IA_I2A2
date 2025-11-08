@@ -71,7 +71,7 @@ from visualization_enhanced import show_enhanced_visualizations, generate_visual
 # =============================================================================
 
 st.set_page_config(
-    page_title="CSV Analysis AI",
+    page_title="ROC CSV Analysis AI",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -940,7 +940,7 @@ def main():
     # Header minimalista
     st.markdown("""
     <div class="header-container">
-        <h1 class="header-title">🤖 CSV Analysis AI</h1>
+        <h1 class="header-title">🤖 ROC CSV Analysis AI</h1>
         <p class="header-subtitle">Análise inteligente de dados com agentes de IA</p>
     </div>
     """, unsafe_allow_html=True)
@@ -1002,7 +1002,7 @@ def main():
         # Tela inicial
         st.markdown("""
         <div class="info-card">
-            <h3>🎯 Bem-vindo ao CSV Analysis AI</h3>
+            <h3>🎯 Bem-vindo ao ROC CSV Analysis AI</h3>
             <p>Esta é uma ferramenta de análise de dados com inteligência artificial que permite:</p>
             <ul>
                 <li>💬 <strong>Chat com Agentes IA:</strong> Faça perguntas sobre seus dados em linguagem natural</li>
