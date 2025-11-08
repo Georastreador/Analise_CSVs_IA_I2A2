@@ -66,6 +66,9 @@ from Relatorios_appCSV.report_generator import ReportGenerator, generate_pdf_rep
 # Importar visualizações avançadas
 from visualization_enhanced import show_enhanced_visualizations, generate_visualization_insights
 
+# Importar sistema de traduções
+from translations import get_text
+
 # =============================================================================
 # CONFIGURAÇÃO DA PÁGINA - ESTILO APPLE
 # =============================================================================
@@ -76,6 +79,10 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Inicializar idioma no session_state
+if 'language' not in st.session_state:
+    st.session_state['language'] = 'pt'
 
 # CSS personalizado estilo Apple
 st.markdown("""
@@ -664,14 +671,30 @@ def show_minimal_overview(df):
 
 def show_sidebar():
     """Sidebar minimalista"""
+    lang = st.session_state.get('language', 'pt')
+    
     with st.sidebar:
-        st.markdown("### ⚙️ Configurações")
+        # Seletor de idioma no topo
+        language_options = {
+            "🇧🇷 Português": "pt",
+            "🇺🇸 English": "en"
+        }
+        selected_language = st.selectbox(
+            get_text("sidebar_language", lang),
+            options=list(language_options.keys()),
+            index=0 if lang == "pt" else 1
+        )
+        st.session_state['language'] = language_options[selected_language]
+        lang = st.session_state['language']
+        
+        st.markdown("---")
+        st.markdown(f"### {get_text('sidebar_config', lang)}")
         
         # API Selection
         api_provider = st.selectbox(
-            "🔑 Provedor de IA",
+            get_text("sidebar_ai_provider", lang),
             ["OpenAI", "GROQ", "Gemini", "Claude", "Perplexity"],
-            help="Selecione qual API de IA usar"
+            help=get_text("sidebar_ai_provider", lang)
         )
         
         # Salvar no session_state
@@ -679,18 +702,18 @@ def show_sidebar():
         
         # API Key
         api_key = st.text_input(
-            f"Chave da API {api_provider}:",
+            f"{get_text('sidebar_api_key', lang)} {api_provider}:",
             type="password",
-            help="Insira sua chave de API"
+            help=get_text("sidebar_api_key_help", lang)
         )
         
         # Salvar no session_state
         st.session_state['api_key'] = api_key
         
         # Test API Button
-        if st.button("🧪 Testar API", use_container_width=True):
+        if st.button(get_text("sidebar_test_api", lang), use_container_width=True):
             if api_key:
-                with st.spinner("Testando..."):
+                with st.spinner(get_text("sidebar_testing", lang)):
                     try:
                         if api_provider == "OpenAI" and OpenAI:
                             client = OpenAI(api_key=api_key)
@@ -942,11 +965,13 @@ def show_sidebar():
 # =============================================================================
 
 def main():
+    lang = st.session_state.get('language', 'pt')
+    
     # Header minimalista
-    st.markdown("""
+    st.markdown(f"""
     <div class="header-container">
-        <h1 class="header-title">🤖 ROC CSV Analysis AI</h1>
-        <p class="header-subtitle">Análise inteligente de dados com agentes de IA</p>
+        <h1 class="header-title">🤖 {get_text('page_title', lang)}</h1>
+        <p class="header-subtitle">{get_text('page_subtitle', lang)}</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -1005,18 +1030,18 @@ def main():
     
     else:
         # Tela inicial
-        st.markdown("""
+        st.markdown(f"""
         <div class="info-card">
-            <h3>🎯 Bem-vindo ao ROC CSV Analysis AI</h3>
-            <p>Esta é uma ferramenta de análise de dados com inteligência artificial que permite:</p>
+            <h3>{get_text('welcome_title', lang)}</h3>
+            <p>{get_text('welcome_description', lang)}</p>
             <ul>
-                <li>💬 <strong>Chat com Agentes IA:</strong> Faça perguntas sobre seus dados em linguagem natural</li>
-                <li>🎯 <strong>Conclusões dos Agentes:</strong> Consulte insights e descobertas dos agentes CrewAI</li>
-                <li>📊 <strong>Overview Inteligente:</strong> Visualização clara e objetiva dos seus dados</li>
-                <li>📈 <strong>Visualizações Avançadas:</strong> Gráficos e análises visuais dos dados</li>
-                <li>📄 <strong>Relatórios Automáticos:</strong> Geração de relatórios em PDF e Markdown</li>
+                <li>{get_text('welcome_feature_1', lang)}</li>
+                <li>{get_text('welcome_feature_2', lang)}</li>
+                <li>{get_text('welcome_feature_3', lang)}</li>
+                <li>{get_text('welcome_feature_4', lang)}</li>
+                <li>{get_text('welcome_feature_5', lang)}</li>
             </ul>
-            <p><strong>Para começar:</strong> Carregue um arquivo CSV na barra lateral e comece a conversar com nossos agentes de IA!</p>
+            <p>{get_text('welcome_start', lang)}</p>
         </div>
         """, unsafe_allow_html=True)
 
